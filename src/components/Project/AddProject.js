@@ -4,6 +4,9 @@ import { connect } from "react-redux";
 import { createProject } from "../../actions/projectActions";
 
 class AddProject extends Component {
+
+
+
   constructor() {
     super();
 
@@ -12,12 +15,24 @@ class AddProject extends Component {
       projectIdentifier: "",
       description: "",
       start_date: "",
-      end_date: ""
+      end_date: "",
+      errors: {}
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.errors)
+    {
+      this.setState({errors: nextProps.errors})
+    }
+  }
+
+
+
+
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
@@ -36,8 +51,12 @@ class AddProject extends Component {
   }
 
   render() {
+   const {errors} = this.state;
+
+
     return (
       <div>
+       
          <div className="project">
           <div className="container">
             <div className="row">
@@ -46,6 +65,7 @@ class AddProject extends Component {
                 <hr />
                 <form onSubmit={this.onSubmit}>
                   <div className="form-group">
+                  <p>{errors.projectName}</p>
                     <input
                       type="text"
                       className="form-control form-control-lg "
@@ -56,6 +76,7 @@ class AddProject extends Component {
                     />
                   </div>
                   <div className="form-group">
+                  <p>{errors.projectIdentifier}</p>
                     <input
                       type="text"
                       className="form-control form-control-lg"
@@ -66,6 +87,7 @@ class AddProject extends Component {
                     />
                   </div>
                   <div className="form-group">
+                  <p>{errors.description}</p>
                     <textarea
                       className="form-control form-control-lg"
                       placeholder="Project Description"
@@ -110,10 +132,18 @@ class AddProject extends Component {
 }
 
 AddProject.propTypes = {
-  createProject: PropTypes.func.isRequired
+  createProject: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
+
+const mapStateToProps = state => ({
+  errors: state.errors  
+
+})
+
+
 export default connect(
-  null,
+  mapStateToProps,
   { createProject }
 )(AddProject);
