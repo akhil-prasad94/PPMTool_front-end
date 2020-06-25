@@ -39,6 +39,13 @@ class Login extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
+  componentDidMount(){
+    if(this.props.security.validToken)
+    {
+      this.props.history.push("/dashboard");
+    }
+  }
+
   render() {
 
     const {errors} = this.state;
